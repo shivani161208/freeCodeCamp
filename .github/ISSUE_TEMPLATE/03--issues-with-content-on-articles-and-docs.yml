@@ -1,41 +1,88 @@
-name: Issues - Content in our Articles and other Documentation
-description: Report issues with content on a specific article, like broken links, typos, missing parts, etc.
+name: Issue - Content in Articles and Documentation
+
+description: >
+  Report issues related to articles or documentation, such as broken links,
+  typos, outdated information, formatting problems, or missing content.
+
 type: Bug
-labels: ['status: waiting triage']
+
+labels:
+  - status: waiting triage
+
 body:
   - type: markdown
     attributes:
-      value: 'NOTE: If you want to become an author on freeCodeCamp, you can find everything here: https://www.freecodecamp.org/news/developer-news-style-guide'
+      value: >
+        **Want to become a freeCodeCamp author?**
+
+        Read the Developer News Style Guide:
+
+        https://www.freecodecamp.org/news/developer-news-style-guide
+
   - type: markdown
     attributes:
-      value: If you are reporting an issue with an article on our news publication, please follow this link to send an email to our editorial team https://mailxto.com/lkj5n7
+      value: >
+        If you are reporting an issue with an article published on
+        **freeCodeCamp News**, please contact our editorial team instead of
+        creating an issue:
+
+        https://mailxto.com/lkj5n7
+
   - type: textarea
     attributes:
       label: Describe the Issue
-      description: A clear and concise description of the issue you encountered.
+      description: >
+        Provide a clear and concise description of the problem.
+      placeholder: Explain what is incorrect, missing, or unclear.
     validations:
       required: true
+
   - type: input
     attributes:
       label: Affected Page
-      description: Add a link to the article or documentation page with the problem.
+      description: >
+        Paste the URL of the article or documentation page where the issue
+        occurs.
+      placeholder: https://www.freecodecamp.org/...
     validations:
       required: true
+
   - type: textarea
     attributes:
       label: Steps to Reproduce
-      description: Please describe the problem and provide the steps to reproduce the issue.
+      description: >
+        Explain how to find or reproduce the issue.
+      placeholder: |
+        1. Open the page
+        2. Navigate to the relevant section
+        3. Observe the issue
     validations:
       required: true
+
   - type: textarea
     attributes:
-      label: Recommended fix or suggestions
-      description: A clear and concise description of how you want to update it.
+      label: Suggested Fix
+      description: >
+        Describe how the content could be corrected or improved.
+      placeholder: Suggest the correct wording, link, or explanation.
     validations:
       required: true
+
   - type: textarea
     attributes:
       label: Screenshots
-      description: If applicable, add screenshots to help explain your problem. You can drag and drop `png`, `jpg`, `gif`, etc. in this box.
+      description: >
+        If applicable, attach screenshots to help explain the issue.
+        You can drag and drop PNG, JPG, GIF, or other supported image files.
+    validations:
+      required: false
+
+  - type: textarea
+    attributes:
+      label: Additional Context
+      description: >
+        Include any other information that may help us understand or resolve
+        the issue.
+      placeholder: References, related links, or additional notes.
     validations:
       required: false
