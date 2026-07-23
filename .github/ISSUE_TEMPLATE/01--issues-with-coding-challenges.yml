@@ -1,61 +1,85 @@
-name: Issue - Content in our Coding Challenges
-description: Report issues with a specific challenge, like broken tests, unclear instructions, etc.
+name: Issue - Content in Our Coding Challenges
+
+description: >
+  Report issues related to a coding challenge, such as broken tests,
+  incorrect solutions, typos, or unclear instructions.
+
 type: Bug
-labels: ['scope: curriculum', 'status: waiting triage']
+
+labels:
+  - scope: curriculum
+  - status: waiting triage
+
 body:
   - type: markdown
     attributes:
-      value: If you're reporting a security issue, don't create a GitHub issue. Instead, visit https://contribute.freecodecamp.org/#/security.
+      value: >
+        If you are reporting a security vulnerability, please **do not**
+        create a GitHub issue. Instead, report it through:
+
+        https://contribute.freecodecamp.org/#/security
+
   - type: textarea
     attributes:
       label: Describe the Issue
-      description: A clear and concise description of the issue you encountered.
+      description: >
+        Provide a clear and concise description of the problem you encountered.
     validations:
       required: true
+
   - type: input
     attributes:
-      label: Affected Page
-      description: Add a link to the coding challenge with the problem.
+      label: Affected Challenge
+      description: >
+        Paste the URL of the coding challenge where the issue occurs.
+      placeholder: https://www.freecodecamp.org/learn/...
     validations:
       required: true
+
   - type: textarea
     attributes:
-      label: Your code
-      description: Copy and paste the code from the editor that you used in between the back-ticks.
+      label: Your Code
+      description: >
+        Paste the code you wrote inside the code block below.
+      render: javascript
       value: |
-        ```
-
-
+        ```javascript
 
         ```
     validations:
       required: true
+
   - type: textarea
     attributes:
-      label: Expected behavior
-      description: Add a clear and concise description of what you expected to happen.
+      label: Expected Behavior
+      description: >
+        Describe what you expected to happen instead.
     validations:
       required: true
+
   - type: textarea
     attributes:
       label: Screenshots
-      description: If applicable, add screenshots to help explain your problem. You can drag and drop `png`, `jpg`, `gif`, etc. in this box.
+      description: >
+        If applicable, drag and drop screenshots here to help explain the issue.
     validations:
       required: false
+
   - type: textarea
     attributes:
-      label: System
-      description: Please complete the following information.
+      label: System Information
+      description: >
+        Please complete the following information.
       value: |
-        - Device: [e.g. iPhone 6, Laptop]
-        - OS: [e.g. iOS 14, Windows 10, Ubuntu 20.04]
-        - Browser: [e.g. Chrome, Safari]
-        - Version: [e.g. 22]
+        - Device:
+        - Operating System:
+        - Browser:
+        - Browser Version:
     validations:
       required: true
+
   - type: textarea
     attributes:
-      label: Additional context
-      description: Add any other context about the problem here.
-    validations:
-      required: false
+      label: Additional Context
+      description: >
+        Include any additional details that migh
