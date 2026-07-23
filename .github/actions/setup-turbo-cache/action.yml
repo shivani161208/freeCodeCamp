@@ -1,75 +1,101 @@
-# Caching Behaviour:
-#   ┌─────────────────────────┬─────────────────┬──────────────────┐
-#   │         Context         │ Can Read Cache? │ Can Write Cache? │
-#   ├─────────────────────────┼─────────────────┼──────────────────┤
-#   │ main (push)             │ YES             │ YES              │
-#   ├─────────────────────────┼─────────────────┼──────────────────┤
-#   │ PRs / temp-* / hotfix-* │ YES             │ NO               │
-#   ├─────────────────────────┼─────────────────┼──────────────────┤
-#   │ prod-*                  │ NO              │ NO               │
-#   ├─────────────────────────┼─────────────────┼──────────────────┤
-#   │ Fork PRs                │ NO              │ NO               │
-#   └─────────────────────────┴─────────────────┴──────────────────┘
+# -----------------------------------------------------------------------------
+# Turbo Remote Cache Configuration
+#
+# Cache Access Policy
+#
+# +---------------------------+------------+-------------+
+# | Context                   | Read Cache | Write Cache |
+# +---------------------------+------------+-------------+
+# | main (push)               | Yes        | Yes         |
+# | Pull Requests             | Yes        | No          |
+# | temp-* / hotfix-*         | Yes        | No          |
+# | prod-*                    | No         | No          |
+# | Fork Pull Requests        | No         | No          |
+# +---------------------------+------------+-------------+
+# -----------------------------------------------------------------------------
 
-name: 'Setup Turbo Remote Cache'
-description: 'Conditionally configure Turbo remote cache based on branch and event context'
+name: Setup Turbo Remote Cache
+
+description: >
+  Configure Turbo Remote Cache based on the current GitHub workflow
+  context while preventing unauthorized cache writes.
 
 inputs:
   turbo-token:
-    description: 'Turbo remote cache authentication token'
+    description: Turbo Remote Cache authentication token
     required: true
+
   turbo-signature-key:
-    description: 'Turbo remote cache signature key for artifact signing/verification'
+    description: Secret used to sign and verify remote cache artifacts
     required: true
 
 runs:
-  using: 'composite'
+  using: composite
+
   steps:
-    - name: Configure Turbo Remote Cache
+    - name: Configure Turbo Cache
       shell: bash
+
       env:
         TURBO_TOKEN: ${{ inputs.turbo-token }}
         TURBO_SIGNATURE_KEY: ${{ inputs.turbo-signature-key }}
+
         GITHUB_REF_NAME: ${{ github.ref_name }}
         GITHUB_EVENT_NAME: ${{ github.event_name }}
         GITHUB_BASE_REF: ${{ github.base_ref }}
+
       run: |
-        echo "::group::Turbo Cache Configuration"
-        echo "Branch: $GITHUB_REF_NAME"
-        echo "Event: $GITHUB_EVENT_NAME"
-        echo "Base ref: $GITHUB_BASE_REF"
+        echo "::group::Turbo Cache Setup"
 
-        # Skip for deployment branches (pure builds)
+        echo "Branch      : $GITHUB_REF_NAME"
+        echo "Event       : $GITHUB_EVENT_NAME"
+        echo "Base Branch : $GITHUB_BASE_REF"
+
+        #######################################################################
+        # Skip deployment branches
+        #######################################################################
         if [[ "$GITHUB_REF_NAME" == prod-* ]]; then
-          echo "::notice::Deployment branch detected - Turbo cache DISABLED for pure build"
+          echo "::notice::Deployment branch detected."
+          echo "::notice::Turbo Remote Cache disabled."
           echo "::endgroup::"
           exit 0
         fi
 
-        # Skip if secrets are not available (fork PRs)
+        #######################################################################
+        # Skip fork pull requests (no secrets available)
+        #######################################################################
         if [[ -z "$TURBO_TOKEN" || -z "$TURBO_SIGNATURE_KEY" ]]; then
-          echo "::notice::Turbo secrets not available (likely a fork PR) - Turbo cache DISABLED"
+          echo "::notice::Turbo secrets unavailable."
+          echo "::notice::Remote cache disabled."
           echo "::endgroup::"
           exit 0
         fi
 
-        # Base configuration for all other contexts
-        echo "TURBO_API=https://turbo-cache.freecodecamp.net" >> $GITHUB_ENV
-        echo "TURBO_TEAM=team_freecodecamp" >> $GITHUB_ENV
-        echo "TURBO_TOKEN=$TURBO_TOKEN" >> $GITHUB_ENV
-        echo "TURBO_REMOTE_CACHE_SIGNATURE_KEY=$TURBO_SIGNATURE_KEY" >> $GITHUB_ENV
-        echo "TURBO_TELEMETRY_DISABLED=1" >> $GITHUB_ENV
+        #######################################################################
+        # Shared Turbo configuration
+        #######################################################################
+        {
+          echo "TURBO_API=https://turbo-cache.freecodecamp.net"
+          echo "TURBO_TEAM=team_freecodecamp"
+          echo "TURBO_TOKEN=$TURBO_TOKEN"
+          echo "TURBO_REMOTE_CACHE_SIGNATURE_KEY=$TURBO_SIGNATURE_KEY"
+          echo "TURBO_TELEMETRY_DISABLED=1"
+        } >> "$GITHUB_ENV"
 
-        # Determine if this context should have write access
-        # Write access: main branch push
-        # Read-only: PRs and other branches (can read from cache, can't pollute it)
+        #######################################################################
+        # Cache permissions
+        #######################################################################
+
         if [[ "$GITHUB_REF_NAME" == "main" && "$GITHUB_EVENT_NAME" == "push" ]]; then
-          echo "::notice::Main branch push - Turbo cache READ/WRITE enabled"
+
+          echo "::notice::Turbo Cache Mode : READ + WRITE"
+
         else
-          # All other contexts: read-only
-          # Use TURBO_CACHE=remote:r for read-only remote cache (local still read/write)
-          echo "TURBO_CACHE=local:rw,remote:r" >> $GITHUB_ENV
-          echo "::notice::PR/other branch - Turbo cache READ-ONLY enabled"
+
+          echo "TURBO_CACHE=local:rw,remote:r" >> "$GITHUB_ENV"
+
+          echo "::notice::Turbo Cache Mode : READ ONLY"
+
         fi
 
         echo "::endgroup::"
