@@ -1,60 +1,93 @@
-name: Issue - User Interface on our Platforms
-description: Report a software bug on /learn, /news, Community Forum, Code Radio, or any of the platforms.
+name: Issue - User Interface on Our Platforms
+
+description: >
+  Report bugs related to the user interface on freeCodeCamp platforms,
+  including Learn, News, Community Forum, Code Radio, or other services.
+
 type: Bug
-labels: ['status: waiting triage']
+
+labels:
+  - status: waiting triage
+
 body:
   - type: markdown
     attributes:
-      value: If you're reporting a security issue, don't create a GitHub issue. Instead, visit https://contribute.freecodecamp.org/#/security.
+      value: >
+        If you are reporting a **security vulnerability**, please **do not**
+        create a GitHub issue.
+
+        Instead, report it here:
+
+        https://contribute.freecodecamp.org/#/security
+
   - type: textarea
     attributes:
       label: Describe the Issue
-      description: A clear and concise description of the issue you encountered.
+      description: >
+        Provide a clear and concise description of the problem.
+      placeholder: Explain what happened and why it appears to be a bug.
     validations:
       required: true
+
   - type: input
     attributes:
       label: Affected Page
-      description: Add a link to the page with the problem.
+      description: >
+        Paste the URL of the page where the issue occurs.
+      placeholder: https://www.freecodecamp.org/...
     validations:
       required: true
+
   - type: textarea
     attributes:
       label: Steps to Reproduce
-      description: Please provide the steps to reproduce the issue.
+      description: >
+        Describe the steps needed to reproduce the issue.
       value: |
-        1. Go to '...'
-        2. Click on '...'
-        3. Scroll down to '...'
-        4. See error
+        1. Go to "..."
+        2. Click on "..."
+        3. Scroll to "..."
+        4. Observe the issue
     validations:
       required: true
+
   - type: textarea
     attributes:
-      label: Expected behavior
-      description: Add a clear and concise description of what you expected to happen.
+      label: Expected Behavior
+      description: >
+        Describe what you expected to happen instead.
+      placeholder: The page should...
     validations:
       required: true
+
   - type: textarea
     attributes:
       label: Screenshots
-      description: If applicable, add screenshots to help explain your problem. You can drag and drop `png`, `jpg`, `gif`, etc. in this box.
+      description: >
+        If applicable, attach screenshots or screen recordings to help explain
+        the issue.
     validations:
       required: false
+
   - type: textarea
     attributes:
-      label: System
-      description: Please complete the following information.
+      label: System Information
+      description: >
+        Please provide details about your environment.
       value: |
-        - Device: [e.g. iPhone 6, Laptop]
-        - OS: [e.g. iOS 14, Windows 10, Ubuntu 20.04]
-        - Browser: [e.g. Chrome, Safari]
-        - Version: [e.g. 22]
+        - Device:
+        - Operating System:
+        - Browser:
+        - Browser Version:
     validations:
       required: true
+
   - type: textarea
     attributes:
-      label: Additional context
-      description: Add any other context about the problem here.
+      label: Additional Context
+      description: >
+        Include any additional information that may help reproduce or diagnose
+        the issue.
+      placeholder: Error messages, logs, or any other relevant details.
     validations:
       required: false
